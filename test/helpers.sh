@@ -118,7 +118,6 @@ check_uri() {
   }" | ${resource_dir}/check | tee /dev/stderr
 }
 
-
 check_uri_with_key() {
   jq -n "{
     source: {
@@ -241,6 +240,15 @@ check_uri_with_tag_filter() {
     source: {
       uri: $(echo $uri | jq -R .),
       trigger_tag_filter: $(echo $tag_filter | jq -R .)
+    }
+  }" | ${resource_dir}/check | tee /dev/stderr
+}
+
+check_uri_pinned_at() {
+  jq -n "{
+    source: {
+      uri: $(echo $1 | jq -R .),
+      pin_ref: $(echo $2 | jq -R .),
     }
   }" | ${resource_dir}/check | tee /dev/stderr
 }

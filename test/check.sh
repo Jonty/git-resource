@@ -260,8 +260,19 @@ it_can_check_with_tag_filter() {
   "
 }
 
+it_can_pin_to_a_ref() {
+  local repo=$(init_repo)
+  local ref1=$(make_commit $repo)
+  local ref2=$(make_commit $repo)
+
+  check_uri_pinned_at $repo $ref1 | jq -e "
+    . == [{ref: $(echo $ref1 | jq -R .)}]
+  "
+}
+
 run it_can_check_from_head
 run it_can_check_from_a_ref
+run it_can_pin_to_a_ref
 run it_can_check_from_a_bogus_sha
 run it_skips_ignored_paths
 run it_checks_given_paths

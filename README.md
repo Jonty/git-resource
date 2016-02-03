@@ -29,6 +29,9 @@ Tracks the commits in a [git](http://git-scm.com/) repository.
 * `skip_ssl_verification`: *Optional.* Skips git ssl verification by exporting
   `GIT_SSL_NO_VERIFY=true`.
 
+* `pin_ref`: *Optional.* Pins the git repository at the specified reference
+  instead of tracking master. Expects a valid git reference.
+
 ### Example
 
 Resource configuration for a private repo:

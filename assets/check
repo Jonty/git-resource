@@ -23,6 +23,7 @@ branch=$(jq -r '.source.branch // ""' < $payload)
 paths="$(jq -r '(.source.paths // ["."])[]' < $payload)" # those "'s are important
 ignore_paths="$(jq -r '":!" + (.source.ignore_paths // [])[]' < $payload)" # these ones too
 tag_filter=$(jq -r '.source.trigger_tag_filter // ""' < $payload)
+pin_ref=$(jq -r '.source.pin_ref // ""' < $payload)
 ref=$(jq -r '.version.ref // ""' < $payload)
 
 destination=$TMPDIR/git-resource-repo-cache
@@ -53,7 +54,11 @@ else
   paths_search="-- $paths $ignore_paths"
 fi
 
-if [ -n "$tag_filter" ]; then
+if [ -n "$pin_ref" ]; then
+{
+  echo $pin_ref
+} | jq -R '.' | jq -s "map({ref: .})" >&3
+elif [ -n "$tag_filter" ]; then
 {
   git describe --tags --abbrev=0 --match "$tag_filter"
 } | jq -R '.' | jq -s "map({ref: .})" >&3
